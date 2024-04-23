@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController as AdminHomeController;
+use App\Http\Controllers\Admin\UserContoller;
 use App\Http\Controllers\Site\HomeController as SiteHomeController;
 
 Route::get('/', [SiteHomeController::class, 'index']);
@@ -18,4 +19,6 @@ Route::prefix('painel')->group(function (){
     Route::post('register', [ RegisterController::class, 'register'])->name('register-action');
 
     Route::post('logout', [ LoginController::class, 'logout'])->name('logout');
+
+    Route::resource('users',UserContoller::class);
 });
