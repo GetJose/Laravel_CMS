@@ -1,0 +1,1 @@
+<h1>View do site comun</h1>
