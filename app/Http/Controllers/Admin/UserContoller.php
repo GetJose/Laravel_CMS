@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserContoller extends Controller
 {
@@ -24,7 +25,7 @@ class UserContoller extends Controller
      */
     public function create()
     {
-        //
+        return view('Admin.users.create');
     }
 
     /**
@@ -32,7 +33,18 @@ class UserContoller extends Controller
      */
     public function store(Request $request)
     {
-        //
+         $request->validate([
+            'name' => 'required|string |max:100',
+            'email' => 'required|string|email|unique:users',
+            'password' => 'required|min:4|string|confirmed'
+        ]);
+
+        $data = $request->only(['name', 'email', 'password', 'password_confirmation']);
+        $data['password'] = Hash::make($data['password']);
+        $user = User::create($data);
+
+        return redirect(route('users.index'));
+        
     }
 
     /**
