@@ -1,6 +1,6 @@
-@extends("adminlte::page");
+@extends("adminlte::page")
 
-@section("title", 'Usuarios');
+@section("title", 'Usuarios')
 @section('content_header')
     <h1>Meus Usuários  
         <a href="{{route('users.create')}}" class="btn btn-sm btn-success">novo usuário</a>
@@ -8,6 +8,8 @@
 @endsection
 
 @section('content')
+    <div class="card">
+        <div class="card-body">
    <table class="table table-hover">
     <tr>
         <th>Id</th>
@@ -27,4 +29,7 @@
     </tr>
     @endforeach
    </table>
+</div>
+</div>
+   {{-- {{ $users->links()}} --}}
 @endsection

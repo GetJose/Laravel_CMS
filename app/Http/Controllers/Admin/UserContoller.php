@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Exists;
 
 class UserContoller extends Controller
 {
@@ -14,7 +15,8 @@ class UserContoller extends Controller
      */
     public function index()
     {
-        $users = User::all();
+       // $users = User::paginate(4);
+       $users = User::all();
         $data['users'] = $users;
 
         return view('Admin.users.index', $data);
@@ -33,7 +35,7 @@ class UserContoller extends Controller
      */
     public function store(Request $request)
     {
-         $request->validate([
+        $request->validate([
             'name' => 'required|string |max:100',
             'email' => 'required|string|email|unique:users',
             'password' => 'required|min:4|string|confirmed'
@@ -44,7 +46,6 @@ class UserContoller extends Controller
         $user = User::create($data);
 
         return redirect(route('users.index'));
-        
     }
 
     /**
@@ -60,7 +61,14 @@ class UserContoller extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::find($id);
+        if ($user) {
+            return view('Admin.users.edit', [
+                'user' => $user
+            ]);
+        }
+
+        return redirect()->route('users.index');
     }
 
     /**
@@ -68,7 +76,37 @@ class UserContoller extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $errors = [];
+
+        $user = User::find($id);
+
+        $request->validate([
+            'name' => 'required|string |max:100',
+            'email' => 'required|string|email',
+        ]);
+
+        $data = $request->only(['name', 'email', 'password', 'password_confirmation']);
+
+        $user->name = $data['name'];
+
+        if($user->email != $data['email']){
+          $hasEmail =  User::where('email', $data['email'])->get();
+            if(count($hasEmail) > 0){
+                return redirect()->route('users.edit', ['user' => $user])->withErrors(['email' => "emails ja existe"]);
+            }
+           $user->email = $data['email'];
+        
+        }
+
+        if(!empty($data['password'])){
+           if($data['password'] != $data['password_confirmation']){
+            return redirect()->route('users.edit', ['user' => $user])->withErrors(['password' => "A confirmação da senha esta incorreta"]);
+           }else{
+                $user->password = Hash::make($data['password']);
+           }
+        };
+        $user->save();
+        return redirect()->route('users.index');
     }
 
     /**

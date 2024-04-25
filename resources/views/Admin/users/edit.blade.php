@@ -1,8 +1,8 @@
 @extends('adminlte::page')
 
-@section('title', 'Adicionar Usuarios')
+@section('title', 'editar Usuarios')
 @section('content_header')
-    <h1>Novo Usuário </h1>
+    <h1>Editar Usuário </h1>
 @endsection
 
 @section('content')
@@ -23,20 +23,21 @@
 
     <div class="card">
         <div class="card-body">
-            <form method="POST" action="{{ route('users.store') }}" class="form-horizontal">
+            <form method="POST" action="{{ route('users.update', ['user' => $user->id]) }}" class="form-horizontal">
                 @csrf
+                @method('PUT')
                 <div class="form-group row">
-                    <label for="name" class="col-sm-2 col-form-label @error('name')  is-invalid  @enderror">Nome
+                    <label for="name"  class="col-sm-2 col-form-label @error('name')  is-invalid  @enderror">Nome
                         Completo</label>
                     <div class="col-sm-10">
-                        <input type="text" name="name" class="form-control">
+                        <input type="text" name="name" value='{{$user->name}}'class="form-control">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="email"
                         class="col-sm-2 col-form-label @error('email')  is-invalid  @enderror">E-mail</label>
                     <div class="col-sm-10">
-                        <input type="email" name="email" class="form-control">
+                        <input type="email" name="email" value='{{$user->email}}' class="form-control">
                     </div>
                 </div>
                 <div class="form-group row">
@@ -56,7 +57,7 @@
                 <div class="form-group row">
                     <label for="" class="col-sm-2 control-label"></label>
                     <div class="col-sm-10">
-                        <input type="submit" value="cadastrar" class="btn btn-success">
+                        <input type="submit" value="Salvar" class="btn btn-success">
                     </div>
                 </div>
             </form>
