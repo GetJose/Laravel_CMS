@@ -2,22 +2,33 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Exists;
+use App\Models\User;
+use App\Http\Controllers\Controller;
 
 class UserContoller extends Controller
 {
+    private $loggedUser;
+    protected $routeMiddleware = [
+        // Outros middlewares...
+        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
+    ];
+
+    public function __construct()
+    {
+        $this->loggedUser = Auth::user();
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-       // $users = User::paginate(4);
-       $users = User::all();
+        // $users = User::paginate(4);
+        $users = User::all();
         $data['users'] = $users;
+        $data['loggedUser'] = $this->loggedUser;
 
         return view('Admin.users.index', $data);
     }
@@ -89,21 +100,20 @@ class UserContoller extends Controller
 
         $user->name = $data['name'];
 
-        if($user->email != $data['email']){
-          $hasEmail =  User::where('email', $data['email'])->get();
-            if(count($hasEmail) > 0){
+        if ($user->email != $data['email']) {
+            $hasEmail =  User::where('email', $data['email'])->get();
+            if (count($hasEmail) > 0) {
                 return redirect()->route('users.edit', ['user' => $user])->withErrors(['email' => "emails ja existe"]);
             }
-           $user->email = $data['email'];
-        
+            $user->email = $data['email'];
         }
 
-        if(!empty($data['password'])){
-           if($data['password'] != $data['password_confirmation']){
-            return redirect()->route('users.edit', ['user' => $user])->withErrors(['password' => "A confirmação da senha esta incorreta"]);
-           }else{
+        if (!empty($data['password'])) {
+            if ($data['password'] != $data['password_confirmation']) {
+                return redirect()->route('users.edit', ['user' => $user])->withErrors(['password' => "A confirmação da senha esta incorreta"]);
+            } else {
                 $user->password = Hash::make($data['password']);
-           }
+            }
         };
         $user->save();
         return redirect()->route('users.index');
@@ -114,6 +124,19 @@ class UserContoller extends Controller
      */
     public function destroy(string $id)
     {
-        //
+
+        $loggedId = Auth::id();
+
+        if ($loggedId != $id) {
+            $user = User::find($id);
+            if ($user) {
+                $user->delete();
+            }
+        }
+        return redirect()->route('users.index');
+    }
+    public static function accessDenied()
+    {
+        return redirect()->route('login');
     }
 }

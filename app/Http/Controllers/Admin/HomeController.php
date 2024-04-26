@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
     public function index(){
-        if (Auth::check()) {
+       // if (Auth::check()) {
             return view('Admin.home');
-        }
-        return redirect()->route('login');
+       // }
+       // return redirect()->route('login');
     }
 }
