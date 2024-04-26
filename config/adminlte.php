@@ -330,7 +330,8 @@ return [
         [
             'text' => 'Meus Usuarios',
             'url' => 'painel/users',
-            'icon' => 'far fa-fw fa-file'
+            'icon' => 'far fa-fw fa-file',
+            'can' => 'edit-users'
         ],
         ['header' => 'account_settings'],
         [

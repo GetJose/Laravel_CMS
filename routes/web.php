@@ -19,8 +19,10 @@ Route::prefix('painel')->group(function () {
     Route::post('register', [RegisterController::class, 'register'])->name('register-action');
 
     Route::middleware('auth')->group(function () {
-        
+
         Route::get('/', [AdminHomeController::class, 'index'])->name('painel');
-        Route::resource('users', UserContoller::class);
+        Route::middleware('can:edit-users')->group(function () {
+            Route::resource('users', UserContoller::class);
+        });
     });
 });
