@@ -11,10 +11,7 @@ use App\Http\Controllers\Controller;
 class UserContoller extends Controller
 {
     private $loggedUser;
-    protected $routeMiddleware = [
-        // Outros middlewares...
-        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
-    ];
+   
 
     public function __construct()
     {
