@@ -341,7 +341,7 @@ return [
         ],
         [
             'text' => 'configurações',
-            'url' => 'painel/config',
+            'url' => 'painel/settings',
             'icon' => 'fas fa-fw fa-file',
         ],
         // [

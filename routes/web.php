@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController as AdminHomeController;
 use App\Http\Controllers\Admin\ProfileControler;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserContoller;
 use App\Http\Controllers\Site\HomeController as SiteHomeController;
 
@@ -29,5 +30,8 @@ Route::prefix('painel')->group(function () {
         Route::middleware('can:edit-users')->group(function () {
             Route::resource('users', UserContoller::class);
         });
+
+        Route::get('settings', [SettingController::class, 'index'])->name('settings');
+        Route::put('settings\save', [SettingController::class, 'save'])->name('settings.save');
     });
 });
