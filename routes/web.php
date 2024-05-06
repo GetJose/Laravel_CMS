@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ProfileControler;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserContoller;
 use App\Http\Controllers\Site\HomeController as SiteHomeController;
+use App\Http\Controllers\Site\PageController;
 
 Route::get('/', [SiteHomeController::class, 'index']);
 
@@ -38,3 +39,5 @@ Route::prefix('painel')->group(function () {
         Route::put('settings\save', [SettingController::class, 'save'])->name('settings.save');
     });
 });
+
+Route::fallback([PageController::class,'index'])->name('pages');

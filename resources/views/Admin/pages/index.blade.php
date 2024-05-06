@@ -2,7 +2,7 @@
 
 @section('title', 'Usuarios')
 @section('content_header')
-    <h1>Minhas Paginas
+    <h1>Minhas Páginas
         <a href="{{ route('pages.create') }}" class="btn btn-sm btn-success">nova pagina</a>
     </h1>
 @endsection
@@ -13,7 +13,7 @@
             <table class="table table-hover">
                 <tr>
                     <th>Id</th>
-                    <th>Title</th>
+                    <th>Título</th>
                     <th>Ações</th>
                 </tr>
                 @foreach ($pages as $page)
@@ -22,7 +22,7 @@
                         <th>{{ $page->title }}</th>
                         <th style="width: 250px">
                             <a href="{{ route('pages.edit', ['page' => $page->id]) }}" class="btn btn-sm btn-info">Editar</a>
-                            <a href="#" class="btn btn-sm btn-success">ver pagina</a>
+                            <a href="{{route('pages', $page->slug)}}" class="btn btn-sm btn-success">ver página</a>
                            
                             <form method="POST" class="d-inline" action="{{ route('pages.destroy', ['page' => $page->id]) }}"
                                 onsubmit="return confirm('Realmente deseja exluir esse usuário?')">
